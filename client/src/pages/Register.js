@@ -7,6 +7,8 @@ import {
   Typography,
   Box,
   Link,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -97,19 +99,20 @@ const Register = () => {
               value={formData.age}
               onChange={handleChange}
             />
-            <TextField
+            <Select
               margin="normal"
               required
               fullWidth
-              select
               name="role"
               label="Role"
               value={formData.role}
               onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Role' }}
             >
-              <option value="child">Child</option>
-              <option value="parent">Parent</option>
-            </TextField>
+              <MenuItem value="child">Child</MenuItem>
+              <MenuItem value="parent">Parent</MenuItem>
+            </Select>
             <Button
               type="submit"
               fullWidth

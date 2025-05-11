@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { orange } from '@mui/material/colors';
@@ -34,7 +34,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
+      <div>
         <Navbar />
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -61,7 +61,7 @@ function App() {
           />
           <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
         </Routes>
-      </Router>
+      </div>
     </ThemeProvider>
   );
 }

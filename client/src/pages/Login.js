@@ -29,10 +29,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.API_URL}/api/auth/login`, formData);
+      const response = await axios.post('http://web:5000/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/#/dashboard');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
     }

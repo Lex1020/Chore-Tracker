@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -14,6 +14,7 @@ import {
 import { Person, Logout } from '@mui/icons-material';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -28,7 +29,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    window.location.href = '/#/login';
+    navigate('/login');
   };
 
   return (
