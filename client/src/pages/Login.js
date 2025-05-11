@@ -28,11 +28,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     try {
-      const response = await axios.post('http://web:5000/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/dashboard');
+      const response = await axios.post('http://localhost:5000/api/auth/login', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response && response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError('Invalid username or password');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
     }
@@ -59,7 +68,12 @@ const Login = () => {
             </Typography>
           )}
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSubmit(e);
+        return false;
+      }} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required

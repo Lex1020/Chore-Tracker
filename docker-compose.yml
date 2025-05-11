@@ -7,7 +7,7 @@ services:
       - "5000:5000"
     environment:
       - MONGODB_URI=mongodb://mongo:27017/chore-chart
-      - JWT_SECRET=your_jwt_secret_here
+      - JWT_SECRET=chore_chart_secret_key_2025
     depends_on:
       - mongo
 
