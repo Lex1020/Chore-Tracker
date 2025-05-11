@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chore-cha
 // Routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const usersRoutes = require('./routes/users');
 const choreRoutes = require('./routes/chores');
 const rewardRoutes = require('./routes/rewards');
 const achievementRoutes = require('./routes/achievements');
@@ -27,7 +28,7 @@ const teamAchievementRoutes = require('./routes/teamAchievements');
 const familyRoutes = require('./routes/family');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/chores', choreRoutes);
 app.use('/api/rewards', rewardRoutes);
 app.use('/api/achievements', achievementRoutes);

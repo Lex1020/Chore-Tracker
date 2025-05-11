@@ -27,12 +27,12 @@ const Rewards = () => {
   const token = localStorage.getItem('token');
   const [user, setUser] = useState(null);
 
-  // Move useEffect hooks outside of conditional statements
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
+  // Check if user is logged in
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
+  useEffect(() => {
     const loadUserData = async () => {
       try {
         const userData = localStorage.getItem('user');
@@ -50,13 +50,9 @@ const Rewards = () => {
       }
     };
     loadUserData();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const fetchRewards = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/rewards', {
@@ -67,13 +63,11 @@ const Rewards = () => {
         console.error('Error fetching rewards:', error);
       }
     };
-    fetchRewards();
-  }, [token]);
 
-  // Check if user is logged in
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+    if (token) {
+      fetchRewards();
+    }
+  }, [token]);
 
   const handleRedeemReward = async (rewardId) => {
     if (!user) {

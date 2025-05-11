@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { orange } from '@mui/material/colors';
@@ -13,6 +13,8 @@ import Rewards from './pages/Rewards';
 import Profile from './pages/Profile';
 import Achievements from './pages/Achievements';
 import FamilyDashboard from './pages/FamilyDashboard';
+import AddChore from './pages/AddChore';
+import AddReward from './pages/AddReward';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +41,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/add-chore" element={user ? <AddChore /> : <Navigate to="/login" />} />
+          <Route path="/rewards/add" element={user ? <AddReward /> : <Navigate to="/login" />} />
           <Route
             path="/dashboard"
             element={user ? <Dashboard /> : <Navigate to="/login" />}
@@ -58,6 +62,10 @@ function App() {
           <Route
             path="/family"
             element={user ? <FamilyDashboard /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/chores/add"
+            element={user ? <AddChore /> : <Navigate to="/login" />}
           />
           <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
         </Routes>

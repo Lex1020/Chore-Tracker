@@ -18,24 +18,31 @@ import {
   AddCircle,
   Star,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Dashboard = () => {
   const [chores, setChores] = useState([]);
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChores = async () => {
       try {
+        console.log('Fetching chores with token:', !!token);
         const response = await axios.get('http://localhost:5000/api/chores', {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('Chores received:', response.data);
         setChores(response.data);
       } catch (error) {
         console.error('Error fetching chores:', error);
+        setError('Failed to fetch chores');
       }
     };
 
@@ -44,15 +51,22 @@ const Dashboard = () => {
         const response = await axios.get('http://localhost:5000/api/users/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setPoints(response.data.points);
-        setStreak(response.data.streak);
+        if (response.data) {
+          setPoints(response.data.points || 0);
+          setStreak(response.data.streak || 0);
+        }
       } catch (error) {
+        setError('Failed to fetch user stats');
         console.error('Error fetching user stats:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchChores();
-    fetchUserStats();
+    if (token) {
+      fetchChores();
+      fetchUserStats();
+    }
   }, [token]);
 
   const handleCompleteChore = async (choreId) => {
@@ -69,6 +83,22 @@ const Dashboard = () => {
       console.error('Error completing chore:', error);
     }
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Typography>Loading...</Typography>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -102,7 +132,7 @@ const Dashboard = () => {
                 <Button
                   variant="contained"
                   startIcon={<AddCircle />}
-                  href="/chores/add"
+                  onClick={() => navigate('/chores/add')}
                 >
                   Add Chore
                 </Button>

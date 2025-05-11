@@ -11,9 +11,6 @@ RUN npm install
 # Copy app files
 COPY . .
 
-# Build client
-RUN cd client && npm install && npm run build
-
 # Expose ports
 EXPOSE 5000
 
