@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/chore-chart
+      - JWT_SECRET=your_jwt_secret_here
+    depends_on:
+      - mongo
+
+  frontend:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:80"
+    environment:
+      - API_URL=http://web:5000
+    depends_on:
+      - web
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo_data:

@@ -1,0 +1,21 @@
+FROM node:18-slim as builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy app files
+COPY . .
+
+# Build app
+RUN npm run build
+
+# Production image
+FROM nginx:alpine
+
+COPY --from=builder /app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
